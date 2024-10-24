@@ -1,0 +1,212 @@
+openapi: 3.0.3
+info:
+  title: Title
+  description: Title
+  version: 1.0.0
+servers:
+  - url: 'https'
+paths:
+  /cars:
+    get:
+      summary: List all cars
+      operationId: listCars
+      tags:
+        - cars
+      parameters:
+        - name: limit
+          in: query
+          description: How many items to return at one time (max 100)
+          required: false
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: A paged array of cars
+          headers:
+            x-next:
+              type: string
+              description: A link to the next page of responses
+          schema:
+            $ref: '#/definitions/Cars'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Create a car
+      operationId: createCars
+      tags:
+        - cars
+      responses:
+        "201":
+          description: Null response
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /cars/{carId}:
+    get:
+      summary: Info for a specific car
+      operationId: showCarById
+      tags:
+        - cars
+      parameters:
+        - name: carId
+          in: path
+          required: true
+          description: The id of the car to retrieve
+          type: string
+      responses:
+        "200":
+          description: Expected response to a valid request
+          schema:
+            $ref: '#/definitions/Cars'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /owners:
+    get:
+      summary: List all owners
+      operationId: listOwners
+      tags:
+        - owners
+      parameters:
+        - name: limit
+          in: query
+          description: How many items to return at one time (max 100)
+          required: false
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: A paged array of owners
+          headers:
+            x-next:
+              type: string
+              description: A link to the next page of responses
+          schema:
+            $ref: '#/definitions/Owners'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Create a owner
+      operationId: createOwners
+      tags:
+        - owners
+      responses:
+        "201":
+          description: Null response
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /owners/{ownerId}:
+    get:
+      summary: Info for a specific owner
+      operationId: showOwnerById
+      tags:
+        - owners
+      parameters:
+        - name: ownerId
+          in: path
+          required: true
+          description: The id of the owner to retrieve
+          type: string
+      responses:
+        "200":
+          description: Expected response to a valid request
+          schema:
+            $ref: '#/definitions/Owners'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  
+
+
+definitions:
+  Car:
+    type: "object"
+    required:
+      - id
+      - brand
+      - model
+      - year
+      - color
+      - licensePlate
+    properties:
+      id:
+        type: int
+      brand:
+        type: string
+      model:
+        type: string
+      year:
+        type: int
+      color:
+        type: string
+      licensePlate:
+        type: string
+  Cars:
+    type: array
+    items:
+      $ref: '#/definitions/Car'
+  Owner:
+    type: "object"
+    required:
+      - id
+      - firstName
+      - lastName
+      - phoneNumber
+      - passwordChanged
+      - accountNonLocked
+      - password
+      - email
+      - enabled
+      - credentialsNonExpired
+      - accountNonExpired
+      - username
+    properties:
+      id:
+        type: int
+      firstName:
+        type: string
+      lastName:
+        type: string
+      phoneNumber:
+        type: string
+      passwordChanged:
+        type: boolean
+      accountNonLocked:
+        type: boolean
+      password:
+        type: string
+      email:
+        type: string
+      enabled:
+        type: boolean
+      credentialsNonExpired:
+        type: boolean
+      accountNonExpired:
+        type: boolean
+      username:
+        type: string
+  Owners:
+    type: array
+    items:
+      $ref: '#/definitions/Owner'
+
+  Error:
+    type: "object"
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string

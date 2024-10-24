@@ -1,0 +1,59 @@
+<!-- db/changelog-1.1-container.xml -->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+  <!-- Create Container Table -->
+    <changeSet id="1" author="your-name">
+    <createTable tableName="car">
+      <column name="id" type="BIGINT">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+        <column name="brand" type="VARCHAR(500)"/>
+        <column name="model" type="VARCHAR(500)"/>
+        <column name="year" type="BIGINT"/>
+        <column name="color" type="VARCHAR(500)"/>
+        <column name="license_plate" type="VARCHAR(500)"/>
+
+        <column name="owner_id" type="BIGINT">
+          <constraints nullable="false"/>
+        </column>
+
+    </createTable>
+  </changeSet>
+
+    <!-- Add foreign key constraint -->
+  <changeSet id="2" author="your-name">
+      <addForeignKeyConstraint
+              baseTableName="car"
+              baseColumnNames="owner_id"
+              referencedTableName="owner"
+              referencedColumnNames="id"
+              constraintName="fk_car_owner"/>
+
+  </changeSet>
+
+    <!-- Create Sequence for ContainerType -->
+  <changeSet id="3" author="your-name">
+    <createSequence sequenceName="car_seq" startValue="1" incrementBy="1"/>
+  </changeSet>
+
+  <!-- Load Data from CSV -->
+  <changeSet id="4" author="your-name">
+    <loadData
+            file="classpath:/db/migration/data/car/Car.csv"
+            tableName="car">
+      <column name="id" type="NUMERIC"/>
+          <column name="brand" type="STRING"/>
+          <column name="model" type="STRING"/>
+          <column name="year" type="NUMERIC"/>
+          <column name="color" type="STRING"/>
+          <column name="license_plate" type="STRING"/>
+        <column name="owner" type="BIGINT"/>
+    </loadData>
+  </changeSet>
+
+
+</databaseChangeLog>
